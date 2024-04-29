@@ -2,7 +2,7 @@ import styles from "./Loader.module.scss";
 import ReactDOM from "react-dom";
 import loaderImg from "../../assets/loader.gif";
 
-const loader = () => {
+const Loader = () => {
   return ReactDOM.createPortal(
     <div className={styles.wrapper}>
       <div className={styles.loader}>
@@ -21,4 +21,4 @@ export const Spinner = () => {
   );
 };
 
-export default loader;
+export default Loader;
