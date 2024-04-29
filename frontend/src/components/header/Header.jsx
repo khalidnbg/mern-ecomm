@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import styles from "./Header.module.scss";
 
 import { FaShoppingCart, FaTimes } from "react-icons/fa";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
+import { useDispatch } from "react-redux";
+import { RESET_AUTH, logout } from "../../redux/features/auth/authSlice";
 
 export const logo = (
   <div className={styles.logo}>
@@ -33,6 +35,16 @@ const Header = () => {
 
   const toggleMenu = () => setshowMenu(!showMenu);
   const hideMenu = () => setshowMenu(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logoutUser = async () => {
+    await dispatch(logout());
+    await dispatch(RESET_AUTH());
+
+    navigate("/login");
+  };
 
   const cart = (
     <span className={styles.cart}>
@@ -82,6 +94,10 @@ const Header = () => {
               <NavLink to="/order-history" className={activeLink}>
                 My Order
               </NavLink>
+
+              <Link to="/" onClick={logoutUser}>
+                Logout
+              </Link>
             </span>
             {cart}
           </div>
