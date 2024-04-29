@@ -11,6 +11,7 @@ import {
 } from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
 import { toast } from "react-toastify";
+import { shortenText } from "../../utils";
 
 const cloud_name = process.env.REACT_APP_CLOUD_NAME;
 const upload_preset = process.env.REACT_APP_UPLOAD_PRESET;
@@ -25,7 +26,7 @@ const Profile = () => {
     phone: user?.phone || "",
     role: user?.role || "",
     photo: user?.photo || "",
-    address: user?.address || {
+    address: {
       address: user?.address?.address || "",
       state: user?.address?.state || "",
       country: user?.address?.country || "",
@@ -52,7 +53,7 @@ const Profile = () => {
         phone: user?.phone || "",
         role: user?.role || "",
         photo: user?.photo || "",
-        address: user?.address || {
+        address: {
           address: user?.address?.address || "",
           state: user?.address?.state || "",
           country: user?.address?.country || "",
@@ -244,6 +245,20 @@ const Profile = () => {
         </div>
       </section>
     </>
+  );
+};
+
+export const UserName = () => {
+  const { user } = useSelector((state) => state.auth);
+
+  const userName = user?.name || "Guest";
+  return (
+    <span
+      style={{
+        color: "#ff7722",
+      }}>
+      Hi, {shortenText(userName, 8)} |
+    </span>
   );
 };
 
