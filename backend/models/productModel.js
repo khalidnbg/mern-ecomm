@@ -8,7 +8,7 @@ const productSchema = mongoose.Schema(
       trim: true,
     },
 
-    namskue: {
+    sku: {
       type: String,
       required: true,
       default: "SKU",

@@ -3,7 +3,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+
 const userRoute = require("./routes/userRoute");
+const productRoute = require("./routes/productRoute");
 const errorHandler = require("./middleware/errorMiddleware");
 
 const app = express();
@@ -21,6 +23,7 @@ app.use(
 
 // Routes
 app.use("/api/users", userRoute);
+app.use("/api/products", productRoute);
 
 app.get("/", (req, res) => {
   res.send("Hello From Home Page....");
