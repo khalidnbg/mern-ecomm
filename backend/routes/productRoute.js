@@ -8,7 +8,9 @@ const {
   deleteProduct,
   updateProduct,
   reviewProduct,
+  deleteReview,
 } = require("../controllers/productController");
+
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 router.post("/", protect, adminOnly, createProduct);
@@ -18,5 +20,6 @@ router.delete("/:id", protect, adminOnly, deleteProduct);
 router.patch("/:id", protect, adminOnly, updateProduct);
 
 router.patch("/review/:id", protect, reviewProduct);
+router.patch("/deleteReview/:id", protect, deleteReview);
 
 module.exports = router;
