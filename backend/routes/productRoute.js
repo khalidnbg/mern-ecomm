@@ -9,6 +9,7 @@ const {
   updateProduct,
   reviewProduct,
   deleteReview,
+  updateReview,
 } = require("../controllers/productController");
 
 const { protect, adminOnly } = require("../middleware/authMiddleware");
@@ -21,5 +22,6 @@ router.patch("/:id", protect, adminOnly, updateProduct);
 
 router.patch("/review/:id", protect, reviewProduct);
 router.patch("/deleteReview/:id", protect, deleteReview);
+router.patch("/updateReview/:id", protect, updateReview);
 
 module.exports = router;

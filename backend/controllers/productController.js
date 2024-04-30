@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Product = require("../models/productModel");
+const { default: mongoose } = require("mongoose");
 
 // create a new product
 const createProduct = asyncHandler(async (req, res) => {
@@ -130,7 +131,7 @@ const reviewProduct = asyncHandler(async (req, res) => {
     review,
     reviewDate,
     name: req.user.name,
-    nameID: req.user._id,
+    userID: req.user._id,
   });
 
   // save product
@@ -150,12 +151,58 @@ const deleteReview = asyncHandler(async (req, res) => {
   }
 
   const newRatings = product.ratings.filter((rating) => {
-    return rating.nameID.toString() !== userID.toString();
+    return rating.userID.toString() !== userID.toString();
   });
 
   product.ratings = newRatings;
   product.save();
   res.status(200).json({ message: "Product review deleted" });
+});
+
+// update review
+const updateReview = asyncHandler(async (req, res) => {
+  const { star, review, reviewDate, userID } = req.body;
+  const { id } = req.params;
+
+  // validation
+  if (star < 1 || !review) {
+    res.status(400);
+    throw new Error("Please add a star and review");
+  }
+
+  const product = await Product.findById(id);
+
+  if (!product) {
+    res.status(400);
+    throw new Error("Product not found");
+  }
+
+  // Match user to the review
+  if (req.user._id.toString() !== userID.toString()) {
+    res.status(401);
+    throw new Error("User Not Authorized");
+  }
+
+  // update product review
+  const updatedReview = await Product.findOneAndUpdate(
+    {
+      _id: product._id,
+      "ratings.userID": mongoose.Types.ObjectId(userID),
+    },
+    {
+      $set: {
+        "ratings.$.star": star,
+        "ratings.$.review": review,
+        "ratings.$.reviewDate": reviewDate,
+      },
+    }
+  );
+
+  if (updateReview) {
+    res.status(200).json({ message: "Product review updated successfully." });
+  } else {
+    res.status(400).json({ message: "Product review not updated." });
+  }
 });
 
 module.exports = {
@@ -166,4 +213,5 @@ module.exports = {
   updateProduct,
   reviewProduct,
   deleteReview,
+  updateReview,
 };
